@@ -3,7 +3,7 @@ import '../sass/app.scss'
 import Router from '@/router'
 import store from '@/store'
 
-import { createApp } from 'vue/dist/vue.esm-bundler';
+import { createApp } from 'vue';
 
 const app = createApp({})
 app.use(Router)

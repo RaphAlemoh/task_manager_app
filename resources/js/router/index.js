@@ -71,7 +71,7 @@ const routes = [
             },
             {
                 name: "edit_task",
-                path: 'edit/task',
+                path: 'edit/task:id',
                 component: EditTask,
                 meta: {
                     title: `Edit Task`
