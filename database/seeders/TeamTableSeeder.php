@@ -4,9 +4,10 @@ namespace Database\Seeders;
 
 use App\Models\Team;
 use Carbon\Carbon;
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
-class TeamSeeder extends Seeder
+class TeamTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.

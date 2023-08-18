@@ -13,10 +13,15 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('teams', function (Blueprint $table) {
+        Schema::create('tasks', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->uuid("uuid");
+            $table->longText('name');
+            $table->unsignedInteger('team_id');
+            $table->unsignedInteger('user_id');
+            $table->integer('order');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
@@ -27,6 +32,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('teams');
+        Schema::dropIfExists('tasks');
     }
 };

@@ -2,73 +2,66 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-
-
-use App\Http\Controllers\Controller;
 use App\Models\User;
-use App\Traits\ApiResponser;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
 {
-    use ApiResponser;
-
     public function login(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'email' => 'required|email',
-            'password' => 'required'
-        ]);
-
-        if ($validator->fails()) {
-            return $this->errorResponse($validator->errors(), 400);
-        }
         $credentials = [
-            'email' => $request->email,
-            'password' => $request->password
+            'email' => request('email'),
+            'password' => request('password')
         ];
 
         if (Auth::attempt($credentials)) {
-            return $this->showOne("User login successfully", 200);
-        } else {
-            return $this->errorResponse("Unauthorized!", 400);
+            $success['token'] = Auth::user()->createToken('Ellipsis')->accessToken;
+            $success['name'] = Auth::user()->name;
+            return response()->json(['success' => $success]);
         }
-    }
 
+        return response()->json(['error' => 'Unauthorised'], 401);
+    }
 
     public function register(Request $request)
     {
-        try {
-            $user = new User();
-            $user->name = $request->name;
-            $user->email = $request->email;
-            $user->password = Hash::make($request->password);
-            $user->save();
+        $validator = Validator::make($request->all(), [
+            'name' => 'required',
+            'email' => 'required|email',
+            'password' => 'required',
+        ]);
 
-            $success = true;
-            $message = "User register successfully";
-        } catch (\Illuminate\Database\QueryException $ex) {
-            $success = false;
-            $message = $ex->getMessage();
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()], 401);
         }
 
-        $response = [
-            'success' => $success,
-            'message' => $message
-        ];
+        $input = $request->all();
+        $input['password'] = bcrypt($input['password']);
 
-        return response()->json($response);
+        $user = User::create($input);
+        $success['token'] = $user->createToken('Ellipsis')->accessToken;
+        $success['name'] = $user->name;
+
+        return response()->json(['success' => $success]);
     }
 
+    public function getDetails()
+    {
+        return response()->json(['success' => Auth::user()]);
+    }
 
-    public function logout()
+    public function logout(Request $request)
     {
         try {
-            Session::flush();
+
+            $user = User::find(Auth::id())->firstOrFail();
+
+            $request->user()->token()->revoke();
+
+            // return $this->showMessage('Successfully logged out', 200);
+
             $success = true;
             $message = "Logout successfully";
         } catch (\Illuminate\Database\QueryException $ex) {

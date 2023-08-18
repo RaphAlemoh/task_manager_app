@@ -12,9 +12,9 @@ class TaskController extends Controller
 {
     use ApiResponser;
 
-    public function index(Request $request)
+    public function index()
     {
-        $tasks = Task::with('user', 'team')->latest()->get();
+        $tasks = Task::with('user', 'team')->latest()->get()->toArray();
 
         return $this->showOne($tasks, 200);
     }
@@ -22,39 +22,63 @@ class TaskController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'text' => ['required',  'string', 'min:5', 'max:50'],
-            'team_id' => ['nullable',  'string']
+            'name' => ['required',  'string', 'min:3', 'max:50'],
+            'team_id' => ['nullable',  'string'],
+            'user_id' => ['required',  'string'],
+            'order' => ['required',  'string']
         ]);
 
         DB::beginTransaction();
         try {
+            // if ($request->team_id != '') $task->team_id =  $request->team_id;
+            $task = Task::create([
+                'name' => $request->name,
+                'team_id' => $request->team_id,
+                'user_id' => $request->user_id,
+                'order' => $request->order
+            ]);
 
-            $task = new Task();
-            $task->text = $request->text;
-            if ($request->team_id != '') $task->team_id =  $request->team_id;
-            $task->user_id = auth()->user()->id;
-            $task->save();
+            return response()->json([
+                'status' => (bool)$task,
+                'data' => $task,
+                'message' => $task ? 'Task Created!' : 'Error Creating Task'
+            ]);
+            // return $this->showOne($teams, 200);
+
+
         } catch (\Exception $exception) {
             DB::rollBack();
             return $this->errorResponse($exception->getMessage(), 400);
-
             Log::error(__METHOD__ . $exception->getTraceAsString());
         }
 
         DB::commit();
+    }
+
+    public function show(Task $task)
+    {
+        return response()->json($task);
+    }
+
+    public function update(Request $request, Task $task)
+    {
+        $status = $task->update(
+            $request->only(['name', 'category_id', 'user_id', 'order'])
+        );
 
         return response()->json([
-            'message' => 'Task successfully created.'
+            'status' => $status,
+            'message' => $status ? 'Task Updated!' : 'Error Updating Task'
         ]);
     }
 
-    public function delete(Request $request)
+    public function destroy(Task $task)
     {
-        $task = Task::find($request->id);
-        $task->delete();
+        $status = $task->delete();
 
         return response()->json([
-            'message' => 'Task successfully deleted.'
+            'status' => $status,
+            'message' => $status ? 'Task Deleted!' : 'Error Deleting Task'
         ]);
     }
 }

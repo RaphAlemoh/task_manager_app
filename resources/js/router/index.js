@@ -1,17 +1,15 @@
 import { createWebHistory, createRouter } from 'vue-router'
-import store from '@/store'
+// import store from '@/store'
 
 /* Guest Component */
 const Login = () => import('@/components/Login.vue')
 const Register = () => import('@/components/Register.vue')
+const Welcome = () => import('@/components/Welcome.vue')
 /* Guest Component */
-
-/* Layouts */
-const DashboardLayout = () => import('@/components/layouts/Default.vue')
-/* Layouts */
 
 /* Authenticated Component */
 const Dashboard = () => import('@/components/Dashboard.vue')
+const Board = () => import('@/components/Board.vue')
 const Task = () => import('@/components/Task/Index.vue')
 const CreateTask = () => import('@/components/Task/Create.vue')
 const EditTask = () => import('@/components/Task/Edit.vue')
@@ -19,6 +17,15 @@ const EditTask = () => import('@/components/Task/Edit.vue')
 
 
 const routes = [
+    {
+        name: "home",
+        path: "/",
+        component: Welcome,
+        meta: {
+            // middleware: "guest",
+            title: `Ellipsis Task Manager`
+        }
+    },
     {
         name: "login",
         path: "/login",
@@ -38,20 +45,30 @@ const routes = [
         }
     },
     {
-        path: "/",
-        component: DashboardLayout,
+        path: "/dashboard",
+        // component: DashboardLayout,
         meta: {
             middleware: "auth"
         },
         children: [
             {
                 name: "dashboard",
-                path: '/',
+                path: '/dashboard',
                 component: Dashboard,
                 meta: {
-                    title: `Dashboard`
+                    title: `User Dashboard`
                 }
             },
+
+            {
+                name: "board",
+                path: '/board',
+                component: Board,
+                meta: {
+                    title: `Task Board`
+                }
+            },
+
 
             {
                 name: "tasks",
@@ -89,12 +106,12 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
     document.title = to.meta.title
     if (to.meta.middleware == "guest") {
-        if (store.state.auth.authenticated) {
+        if (localStorage.getItem("jwt")) {
             next({ name: "dashboard" })
         }
         next()
     } else {
-        if (store.state.auth.authenticated) {
+        if (localStorage.getItem("jwt")) {
             next()
         } else {
             next({ name: "login" })
