@@ -49,6 +49,22 @@
                 >Task</router-link
               >
             </li>
+            <li class="nav-item">
+              <router-link
+                :to="{ name: 'teams' }"
+                class="nav-link"
+                v-if="role == 'admin'"
+                >Teams</router-link
+              >
+            </li>
+            <li class="nav-item">
+              <router-link
+                :to="{ name: 'users' }"
+                class="nav-link"
+                v-if="role == 'admin'"
+                >Users</router-link
+              >
+            </li>
           </ul>
           <div class="d-flex">
             <ul class="navbar-nav" v-if="isLoggedIn">
@@ -92,17 +108,25 @@ export default {
     return {
       isLoggedIn: null,
       name: null,
+      role: null,
     };
   },
   mounted() {
-    this.isLoggedIn = localStorage.getItem("jwt");
-    this.name = localStorage.getItem("user");
+    const token = localStorage.getItem("jwt");
+    if (token) {
+      this.isLoggedIn = token;
+      this.name = localStorage.getItem("name");
+      this.role = localStorage.getItem("roles");
+
+      axios.defaults.headers.common["Content-Type"] = "application/json";
+      axios.defaults.headers.common["Authorization"] = "Bearer " + token;
+    }
   },
   methods: {
     async logout() {
       await axios.get("/logout").then((response) => {
         localStorage.clear();
-        this.$router.push({ name: "login" });
+        this.$router.go("/login");
       });
     },
   },

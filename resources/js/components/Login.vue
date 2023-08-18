@@ -90,9 +90,9 @@ export default {
             password: this.password,
           })
           .then((response) => {
-            localStorage.setItem("user", response.data.success.name);
+            localStorage.setItem("name", response.data.success.name);
+            localStorage.setItem("roles", response.data.success.roles);
             localStorage.setItem("jwt", response.data.success.token);
-
             if (localStorage.getItem("jwt") != null) {
               this.$router.go("/dashboard");
             }

@@ -27,6 +27,12 @@ if (token) {
     console.error('CSRF token not found: https://laravel.com/docs/csrf#csrf-x-csrf-token');
 }
 
+let user_token = localStorage.getItem("jwt");
+if (user_token) {
+    window.axios.defaults.headers.common["Content-Type"] = "application/json";
+    window.axios.defaults.headers.common["Authorization"] = "Bearer " + token;
+}
+
 
 
 /**

@@ -27,8 +27,11 @@ export default {
     };
   },
   mounted() {
-    this.isLoggedIn = localStorage.getItem("jwt");
-    this.name = localStorage.getItem("user");
+    const token = localStorage.getItem("jwt");
+    if (token) {
+      this.isLoggedIn = token;
+      this.name = localStorage.getItem("name");
+    }
   },
   beforeRouteEnter(to, from, next) {
     if (!localStorage.getItem("jwt")) {

@@ -10,9 +10,13 @@ const Welcome = () => import('@/components/Welcome.vue')
 /* Authenticated Component */
 const Dashboard = () => import('@/components/Dashboard.vue')
 const Board = () => import('@/components/Board.vue')
-const Task = () => import('@/components/Task/Index.vue')
-const CreateTask = () => import('@/components/Task/Create.vue')
-const EditTask = () => import('@/components/Task/Edit.vue')
+const Team = () => import('@/components/Team/Index.vue')
+const CreateTeam = () => import('@/components/Team/Create.vue')
+const EditTeam = () => import('@/components/Team/Edit.vue')
+
+const User = () => import('@/components/User/Index.vue')
+const CreateUser = () => import('@/components/User/Create.vue')
+const EditUser = () => import('@/components/User/Edit.vue')
 /* Authenticated Component */
 
 
@@ -22,7 +26,8 @@ const routes = [
         path: "/",
         component: Welcome,
         meta: {
-            title: `Ellipsis Task Manager`
+            title: `Ellipsis Task Manager`,
+            middleware: "guest"
         }
     },
     {
@@ -45,7 +50,6 @@ const routes = [
     },
     {
         path: "/dashboard",
-        // component: DashboardLayout,
         meta: {
             middleware: "auth"
         },
@@ -68,29 +72,52 @@ const routes = [
                 }
             },
 
-
             {
-                name: "tasks",
-                path: '/tasks',
-                component: Task,
+                name: "teams",
+                path: '/teams',
+                component: Team,
                 meta: {
-                    title: `Task`
+                    title: `Team`
                 }
             },
             {
-                name: "create_task",
-                path: 'create/task',
-                component: CreateTask,
+                name: "create_team",
+                path: 'create/team',
+                component: CreateTeam,
                 meta: {
-                    title: `Create Task`
+                    title: `Create Team`
                 }
             },
             {
-                name: "edit_task",
-                path: 'edit/task:id',
-                component: EditTask,
+                name: "edit_team",
+                path: 'edit/team:id',
+                component: EditTeam,
                 meta: {
-                    title: `Edit Task`
+                    title: `Edit Team`
+                }
+            },
+            {
+                name: "users",
+                path: '/users',
+                component: User,
+                meta: {
+                    title: `User`
+                }
+            },
+            {
+                name: "create_user",
+                path: 'create/user',
+                component: CreateUser,
+                meta: {
+                    title: `Create User`
+                }
+            },
+            {
+                name: "edit_user",
+                path: 'edit/user:id',
+                component: EditUser,
+                meta: {
+                    title: `Edit User`
                 }
             }
         ]
@@ -104,17 +131,10 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
     document.title = to.meta.title
-    if (to.meta.middleware == "guest") {
-        if (localStorage.getItem("jwt")) {
-            next({ name: "dashboard" })
-        }
-        next()
+    if (to.meta.name == "login" || to.meta.name == "register" && localStorage.getItem("jwt")) {
+        next({ name: "dashboard" })
     } else {
-        if (localStorage.getItem("jwt")) {
-            next()
-        } else {
-            next()
-        }
+        next()
     }
 })
 

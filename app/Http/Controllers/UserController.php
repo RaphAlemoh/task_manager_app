@@ -17,8 +17,12 @@ class UserController extends Controller
         ];
 
         if (Auth::attempt($credentials)) {
-            $success['token'] = Auth::user()->createToken('Ellipsis')->accessToken;
-            $success['name'] = Auth::user()->name;
+            $user = Auth::user();
+            $success['token'] = $user->createToken('Ellipsis')->accessToken;
+            $success['name'] = $user->name;
+            $success['roles'] = $user->roles->map(function ($item) {
+                return $item->name;
+            });
             return response()->json(['success' => $success]);
         }
 
@@ -41,8 +45,13 @@ class UserController extends Controller
         $input['password'] = bcrypt($input['password']);
 
         $user = User::create($input);
+
+        $user->roles()->attach(3);
+
         $success['token'] = $user->createToken('Ellipsis')->accessToken;
         $success['name'] = $user->name;
+
+
 
         return response()->json(['success' => $success]);
     }
@@ -59,8 +68,6 @@ class UserController extends Controller
             $user = User::find(Auth::id())->firstOrFail();
 
             $request->user()->token()->revoke();
-
-            // return $this->showMessage('Successfully logged out', 200);
 
             $success = true;
             $message = "Logout successfully";

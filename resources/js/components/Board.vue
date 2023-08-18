@@ -1,5 +1,37 @@
 <template>
   <div class="container mt-2">
+    <div class="row justify-content-end">
+      <div class="col-md-6">
+        <form>
+          <div class="input-group mb-3">
+            <input
+              type="search"
+              v-model.lazy="search"
+              class="form-control"
+              aria-label="Text input with dropdown button"
+            />
+            <button
+              class="btn btn-outline-secondary dropdown-toggle"
+              type="button"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              Teams
+            </button>
+            <div v-if="teams && teams.length > 0">
+              <ul
+                class="dropdown-menu dropdown-menu-end"
+                v-for="team in teams"
+                :key="team.id"
+                :value="team.id"
+              >
+                <li><a class="dropdown-item" href="#">{{ team.name }}</a></li>
+              </ul>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
     <div class="row justify-content-center">
       <div class="col-md-12">
         <div class="row">
@@ -143,6 +175,8 @@ export default {
       img: "",
       editingTask: null,
       imgPreview: null,
+      search: null,
+      selectedTeam: null,
     };
   },
   methods: {
@@ -212,10 +246,6 @@ export default {
     },
   },
   mounted() {
-    let token = localStorage.getItem("jwt");
-    axios.defaults.headers.common["Content-Type"] = "application/json";
-    axios.defaults.headers.common["Authorization"] = "Bearer " + token;
-
     axios.get("api/teams").then((response) => {
       response.data.forEach((data) => {
         this.teams.push({

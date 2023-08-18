@@ -3,17 +3,17 @@
     <div class="container mt-2">
       <div class="row">
         <div class="col-12">
+          <!-- Page Heading -->
           <div
-            class="d-sm-flex align-items-center justify-content-between mb-4"
+            class="d-flex align-items-center justify-content-between mb-4"
           >
-            <h1 class="h3 mb-0 text-gray-800">Users</h1>
-
+            <h1 class="h3 mb-0 text-gray-800">Teams</h1>
             <div class="row justify-content-end">
               <div class="col-md-12">
                 <router-link
-                  :to="{ name: 'create_user' }"
+                  :to="{ name: 'create_team' }"
                   class="btn btn-primary mb-2"
-                  >Create User</router-link
+                  >Create Team</router-link
                 >
               </div>
             </div>
@@ -21,9 +21,7 @@
           <div class="row">
             <div class="card mx-auto">
               <div v-if="showMessage">
-                <div class="alert alert-success">
-                  {{ message }}
-                </div>
+                <div class="alert alert-success">{{ message }}</div>
               </div>
               <div class="card-header">
                 <div class="row">
@@ -33,10 +31,9 @@
                         <div class="col">
                           <input
                             type="search"
-                            name="search"
+                            v-model.lazy="search"
                             class="form-control mb-2"
-                            id="inlineFormInput"
-                            placeholder="Search User"
+                            placeholder="Search for a team"
                           />
                         </div>
                         <div class="col">
@@ -54,28 +51,26 @@
                   <thead>
                     <tr>
                       <th scope="col">#Id</th>
-                      <th scope="col">Username</th>
-                      <th scope="col">Email</th>
+                      <th scope="col">Name</th>
                       <th scope="col">Manage</th>
                     </tr>
                   </thead>
                   <tbody>
-                    <tr v-for="user in users" :key="user.id">
-                      <th scope="row">#{{ user.id }}</th>
-                      <td>{{ user.name }}</td>
-                      <td>{{ user.email }}</td>
+                    <tr v-for="team in teams" :key="team.id">
+                      <th scope="row">#{{ team.id }}</th>
+                      <td>{{ team.name }}</td>
                       <td>
                         <router-link
                           :to="{
-                            name: 'edit_user',
-                            params: { id: user.id }
-                            }"
+                            name: 'edit_team',
+                            params: { id: team.id },
+                          }"
                           class="btn btn-success"
                           >Edit</router-link
                         >
                         <button
                           class="btn btn-danger"
-                          @click="deleteUser(user.id)"
+                          @click="deleteTeam(team.id)"
                         >
                           Delete
                         </button>
@@ -91,11 +86,12 @@
     </div>
   </div>
 </template>
+
 <script>
 export default {
   data() {
     return {
-      users: [],
+      teams: [],
       showMessage: false,
       message: "",
       search: null,
@@ -103,32 +99,32 @@ export default {
   },
   watch: {
     search() {
-      this.getUsers();
+      this.getTeams();
     },
   },
   created() {
-    this.getUsers();
+    this.getTeams();
   },
   methods: {
-    getUsers() {
+    getTeams() {
       axios
-        .get("/api/users", {
+        .get("/api/teams", {
           params: {
             search: this.search,
           },
         })
         .then((res) => {
-          this.users = res.data.data;
+          this.teams = res.data;
         })
         .catch((error) => {
           console.log(error);
         });
     },
-    deleteUser(id) {
-      axios.delete("api/users/" + id).then((res) => {
+    deleteTeam(id) {
+      axios.delete("api/teams/" + id).then((res) => {
         this.showMessage = true;
         this.message = res.data;
-        this.getUsers();
+        this.getTeams();
       });
     },
   },

@@ -27,22 +27,23 @@ class TaskController extends Controller
             'order' => ['required',  'string']
         ]);
 
-        try {
-            $task = Task::create([
-                'name' => $request->name,
-                'team_id' => $request->team_id,
-                'user_id' => auth()->user()->id,
-                'order' => $request->order
-            ]);
+        $task = Task::create([
+            'name' => $request->name,
+            'team_id' => $request->team_id,
+            'user_id' => auth()->user()->id,
+            'order' => $request->order
+        ]);
 
+        if ($task) {
             return response()->json([
                 'status' => (bool)$task,
                 'data' => $task,
                 'message' => $task ? 'Task Created!' : 'Error Creating Task'
             ]);
-        } catch (\Exception $exception) {
-            return $this->errorResponse($exception->getMessage(), 400);
         }
+
+
+        return $this->errorResponse("Something went wrong please try again", 400);
     }
 
     public function show(Task $task)
