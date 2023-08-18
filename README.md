@@ -15,13 +15,17 @@
 
     - composer install
 
+    - npm install
+
     - cp .env.example .env
 
     - php artisan key:generate
 
     - php artisan migrate
 
-    - npm install
+    - php artisan db:seed
+
+    - php artisan passport:install
 
     - npm run dev
 
@@ -32,3 +36,20 @@
 # Ellipsis Task Management Board
 
 ![Alt text](image.png)
+
+
+# Login Details
+ - Admin
+
+    ```
+    Email : admin@ellipsis.com
+    Password : _ec2_fa$#
+    ```
+
+
+ - Customer
+    
+    ```
+    Email : worker@ellipsis.com
+    Password : _ec2_fa$#
+    ```
