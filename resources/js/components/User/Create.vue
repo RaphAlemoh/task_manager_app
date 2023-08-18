@@ -127,7 +127,7 @@ export default {
           this.roles = res.data;
         })
         .catch((error) => {
-          console.log(console.error);
+          console.log(error);
         });
     },
     storeUser() {
@@ -142,7 +142,7 @@ export default {
           this.$router.push({ name: "users" });
         })
         .catch((error) => {
-          console.log(console.error);
+          console.log(error);
         });
     },
   },

@@ -68,7 +68,7 @@ export default {
           this.form = res.data;
         })
         .catch((error) => {
-          console.log(console.error);
+          console.log(error);
         });
     },
     updateTask() {
@@ -80,7 +80,7 @@ export default {
           this.$router.push({ name: "teams" });
         })
         .catch((error) => {
-          console.log(console.error);
+          console.log(error);
         });
     },
   },

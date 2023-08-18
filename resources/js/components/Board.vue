@@ -46,7 +46,7 @@
               <div class="col-md-4">
                 <div class="card">
                   <div class="card-header">
-                    <h4 class="card-title"></h4>
+                    <h4 class="card-title">{{ element.name }}</h4>
                   </div>
                   <div class="card-body card-body-dark">
                     <div class="transit-1">

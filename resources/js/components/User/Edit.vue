@@ -129,7 +129,7 @@ export default {
           this.form = res.data.data;
         })
         .catch((error) => {
-          console.log(console.error);
+          console.log(error);
         });
     },
     getRoles() {
@@ -139,7 +139,7 @@ export default {
           this.roles = res.data;
         })
         .catch((error) => {
-          console.log(console.error);
+          console.log(error);
         });
     },
     updateUser() {
@@ -151,7 +151,7 @@ export default {
           this.$router.push({ name: "users" });
         })
         .catch((error) => {
-          console.log(console.error);
+          console.log(error);
         });
     },
   },

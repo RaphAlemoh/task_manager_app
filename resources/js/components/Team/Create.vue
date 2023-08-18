@@ -66,7 +66,7 @@ export default {
           this.teams = res.data.data;
         })
         .catch((error) => {
-          console.log(console.error);
+          console.log(error);
         });
     },
     storeTeam() {
@@ -78,7 +78,7 @@ export default {
           this.$router.push({ name: "teams" });
         })
         .catch((error) => {
-          console.log(console.error);
+          console.log(error);
         });
     },
   },
