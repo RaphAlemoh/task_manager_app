@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="container mt-2">
     <div class="row justify-content-center">
       <div class="col-md-8">
         <div class="card card-default">
@@ -24,7 +24,7 @@
                 </div>
               </div>
 
-              <div class="form-group row">
+              <div class="form-group row mt-2">
                 <label for="email" class="col-md-4 col-form-label text-md-right"
                   >E-Mail Address</label
                 >
@@ -40,7 +40,7 @@
                 </div>
               </div>
 
-              <div class="form-group row">
+              <div class="form-group row mt-2">
                 <label
                   for="password"
                   class="col-md-4 col-form-label text-md-right"
@@ -58,7 +58,7 @@
                 </div>
               </div>
 
-              <div class="form-group row">
+              <div class="form-group row mt-2">
                 <label
                   for="password-confirm"
                   class="col-md-4 col-form-label text-md-right"
@@ -77,7 +77,7 @@
               </div>
 
               <div class="form-group row mb-0">
-                <div class="col-md-6 offset-md-4">
+                <div class="col-md-6 offset-md-4 mt-2">
                   <button
                     type="submit"
                     class="btn btn-primary"
@@ -88,6 +88,14 @@
                 </div>
               </div>
             </form>
+            <div class="col-12 text-center">
+              <label
+                >Already have an account?
+                <router-link :to="{ name: 'login' }"
+                  >Login Now!</router-link
+                ></label
+              >
+            </div>
           </div>
         </div>
       </div>
@@ -122,7 +130,7 @@ export default {
           })
           .then((response) => {
             if (response.data.success) {
-              this.$router.go("/login");
+              this.$router.push({ name: "login" });
             }
           })
           .catch((error) => {
@@ -137,8 +145,8 @@ export default {
     },
   },
   beforeRouteEnter(to, from, next) {
-    if (!localStorage.getItem("jwt")) {
-      return next("login");
+    if (localStorage.getItem("jwt")) {
+      return next("dashboard");
     }
     next();
   },

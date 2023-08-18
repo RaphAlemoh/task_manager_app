@@ -1,7 +1,7 @@
 <template>
   <div>
     <nav
-      class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top"
+      class="navbar navbar-expand-lg navbar-dark bg-dark static-top"
       id="mainNav"
     >
       <div class="container px-4">
@@ -81,7 +81,7 @@
         </div>
       </div>
     </nav>
-    <main class="mt-4">
+    <main>
       <router-view></router-view>
     </main>
   </div>

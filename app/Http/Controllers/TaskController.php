@@ -24,17 +24,15 @@ class TaskController extends Controller
         $this->validate($request, [
             'name' => ['required',  'string', 'min:3', 'max:50'],
             'team_id' => ['nullable',  'string'],
-            'user_id' => ['required',  'string'],
             'order' => ['required',  'string']
         ]);
 
         DB::beginTransaction();
         try {
-            // if ($request->team_id != '') $task->team_id =  $request->team_id;
             $task = Task::create([
                 'name' => $request->name,
                 'team_id' => $request->team_id,
-                'user_id' => $request->user_id,
+                'user_id' => auth()->user()->id,
                 'order' => $request->order
             ]);
 
@@ -43,9 +41,6 @@ class TaskController extends Controller
                 'data' => $task,
                 'message' => $task ? 'Task Created!' : 'Error Creating Task'
             ]);
-            // return $this->showOne($teams, 200);
-
-
         } catch (\Exception $exception) {
             DB::rollBack();
             return $this->errorResponse($exception->getMessage(), 400);

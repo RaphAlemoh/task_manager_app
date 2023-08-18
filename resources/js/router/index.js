@@ -22,7 +22,6 @@ const routes = [
         path: "/",
         component: Welcome,
         meta: {
-            // middleware: "guest",
             title: `Ellipsis Task Manager`
         }
     },
@@ -114,7 +113,7 @@ router.beforeEach((to, from, next) => {
         if (localStorage.getItem("jwt")) {
             next()
         } else {
-            next({ name: "login" })
+            next()
         }
     }
 })

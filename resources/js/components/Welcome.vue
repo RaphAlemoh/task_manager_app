@@ -83,7 +83,7 @@
     </footer>
   </div>
 </template>
-<script scoped>
+<script>
 window.addEventListener("DOMContentLoaded", (event) => {
   const mainNav = document.body.querySelector("#mainNav");
   if (mainNav) {

@@ -6,17 +6,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}" />
     <title>{{env('APP_NAME')}}</title>
-    <!-- @vite('resources/css/app.css') -->
+    @vite('resources/css/app.css')
     <style>
         html {
             scroll-padding-top: 3.5rem;
         }
-
         header {
             padding-top: 9.5rem;
             padding-bottom: 6rem;
         }
-
         section {
             padding-top: 9rem;
             padding-bottom: 9rem;
@@ -30,5 +28,4 @@
     </div>
     @vite('resources/js/app.js')
 </body>
-
 </html>
