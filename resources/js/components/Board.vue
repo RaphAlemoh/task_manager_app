@@ -14,8 +14,7 @@
               <div class="col-md-4">
                 <div class="card">
                   <div class="card-header">
-                    <h4 class="card-title">
-                    </h4>
+                    <h4 class="card-title"></h4>
                   </div>
                   <div class="card-body card-body-dark">
                     <div class="transit-1">
@@ -67,7 +66,7 @@
                     </div>
                     <div class="small-card">
                       <h5 class="text-center" @click="addNew(index)">
-                        Add new card
+                        + Add new card
                       </h5>
                     </div>
                   </div>
@@ -105,6 +104,12 @@
   margin-bottom: 5px;
   border-radius: 0.25rem;
 }
+
+.small-card h5:hover {
+  color: green;
+  cursor: pointer;
+}
+
 .small-card-append {
   padding: 1rem;
   background: #91bddb;
@@ -135,7 +140,7 @@ export default {
   data() {
     return {
       teams: [],
-      img: '',
+      img: "",
       editingTask: null,
       imgPreview: null,
     };

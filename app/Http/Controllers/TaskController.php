@@ -27,7 +27,6 @@ class TaskController extends Controller
             'order' => ['required',  'string']
         ]);
 
-        DB::beginTransaction();
         try {
             $task = Task::create([
                 'name' => $request->name,
@@ -42,12 +41,8 @@ class TaskController extends Controller
                 'message' => $task ? 'Task Created!' : 'Error Creating Task'
             ]);
         } catch (\Exception $exception) {
-            DB::rollBack();
             return $this->errorResponse($exception->getMessage(), 400);
-            Log::error(__METHOD__ . $exception->getTraceAsString());
         }
-
-        DB::commit();
     }
 
     public function show(Task $task)
