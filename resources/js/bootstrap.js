@@ -48,12 +48,12 @@ window.Pusher = Pusher;
 
 window.Echo = new Echo({
     broadcaster: 'pusher',
-    key: import.meta.env.VITE_PUSHER_APP_KEY,
-    wsHost: import.meta.env.VITE_PUSHER_HOST ?? `ws-${import.meta.env.VITE_PUSHER_APP_CLUSTER}.pusher.com`,
-    wsPort: import.meta.env.VITE_PUSHER_PORT ?? 80,
-    wssPort: import.meta.env.VITE_PUSHER_PORT ?? 443,
-    forceTLS: (import.meta.env.VITE_PUSHER_SCHEME ?? 'https') === 'https',
+    key: `${VITE_PUSHER_APP_KEY}`,
+    wsHost: VITE_PUSHER_HOST ?? `ws-${VITE_PUSHER_APP_CLUSTER}.pusher.com`,
+    wsPort: VITE_PUSHER_PORT ?? 80,
+    wssPort: VITE_PUSHER_PORT ?? 443,
+    forceTLS: (VITE_PUSHER_SCHEME ?? 'https') === 'https',
     enabledTransports: ['ws', 'wss'],
     encrypted: false,
-    cluster:import.meta.env.VITE_PUSHER_APP_CLUSTER
+    cluster: `${VITE_PUSHER_APP_CLUSTER}`
 });
